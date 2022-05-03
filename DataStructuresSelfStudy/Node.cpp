@@ -1,10 +1,14 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Node {
 public:
+	// I assumed the node would contain a large object on the heap, requiring a custom destructor.
+	// Using an int datatype here is just for testing purposes.
 	int* dataPtr = new int;  // create a new ptr to data on the heap
 	Node* nextPtr;
+
 	// default constructor
 	Node() {
 		dataPtr = 0;
@@ -12,7 +16,7 @@ public:
 	}
 	// parameterized constructor
 	Node(int data) {
-		this->dataPtr = &data;
+		*(this->dataPtr) = data;  // make "data" the value of the int on the heap 
 		this->nextPtr = nullptr;
 	}
 	// destructor
@@ -21,44 +25,20 @@ public:
 		dataPtr = nullptr;  // eliminate stale pointers
 		nextPtr = nullptr;
 	}
-	/*
-	// copy constructor (helper to copy assignment operator)
+	
+	//copy constructor 
 	Node(const Node &rhs) {
 		*dataPtr = *rhs.dataPtr;
 		*nextPtr = *rhs.nextPtr;
 	}
-	*/
-	// swap function (helper to copy assignment operator)
-	friend void swap(Node& a, Node& b) {
-		swap(a.dataPtr, b.dataPtr);
-		swap(a.nextPtr, b.nextPtr);
-	}
-	// copy assignment operator using copy-and-swap idiom
-	Node& operator=(Node rhs) {
-		swap(*this, rhs);
+	
+	// copy assignment operator NOT using copy-and-swap idiom
+	Node &operator=(Node &rhs)  {
 		return *this;
 	}
-	// move constructor
-	Node(Node&& rhs) noexcept : dataPtr(nullptr), nextPtr(nullptr) {
-		// copy the state from the source object
-		dataPtr = rhs.dataPtr;
-		nextPtr = rhs.nextPtr;
-		// release the pointers from the source object so the destructor doesn't call delete multiple times
-		rhs.dataPtr = nullptr; 
-		rhs.nextPtr = nullptr;
+
+	string toString() {
+		return to_string(* (this->dataPtr) );
 	}
-	// move assignment operator
-	Node &operator=(Node&& rhs) noexcept {
-		if (this != &rhs) {
-			// free the existing resource
-			delete[] dataPtr;
-			delete[] nextPtr;
-			// copy the state from the source object
-			dataPtr = rhs.dataPtr;
-			nextPtr = rhs.nextPtr;
-			// release the pointers from the source object so the destructor doesn't call delete multiple times
-			rhs.dataPtr = nullptr;
-			rhs.nextPtr = nullptr;
-		}
-	}
+	
 };
