@@ -7,6 +7,7 @@ public:
 	LinkedList() {
 		headPtr = nullptr;
 	}
+
 	// destructor
 	~LinkedList() {
 		if (headPtr == nullptr) {  // delete the head pointer if there's no head
@@ -22,8 +23,21 @@ public:
 	}
 
 	// copy assignment operator NOT using copy-and-swap idiom
+	LinkedList(const LinkedList &rhs) {
+		if (rhs.headPtr == nullptr)
+			headPtr = nullptr;
+		else {
+			// if there is a header in rhs, assign a copy the header of rhs to it.
+			headPtr = new Node(*(rhs.headPtr->dataPtr) );
 
-
+			// traverse rhs, creating a new node of lhs and copying data of each node from rhs into the new node of rhs
+			Node *temp = nullptr;
+			temp = rhs.headPtr->nextPtr;
+			while (temp->nextPtr != nullptr) {
+				Node *temp1 = new Node();
+			}
+		}
+	}
 	// insert a node at the beginning of the list
 	void insertFirst(int element) {
 		Node* newNode = new Node(element);
