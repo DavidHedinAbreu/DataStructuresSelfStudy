@@ -23,7 +23,7 @@ public:
 	~Node() {
 		delete dataPtr; // because data is on the heap, delete it
 		dataPtr = nullptr;  // eliminate stale pointers
-		nextPtr = nullptr;
+		nextPtr = nullptr; 
 	}
 	
 	//copy constructor 
