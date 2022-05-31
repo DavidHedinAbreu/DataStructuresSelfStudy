@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Node bogus(Node n) {
+SLNode bogus(SLNode n) {
 	cout << "bogus method called" << endl;
 	return n;
 }
