@@ -35,59 +35,85 @@ public:
 	BTree(const BTree& rhs) {
 		cout << "BTree copy constructor called" << endl;
 		rootPtr = rhs.rootPtr;
-		
 	}
 
-	// Deep copy constructor, new BTree contains copy of all nodes in original.
-	
+	// Insert a new BTNode containing the given data after a particular root node with given memory location.
+	// If data < root, insert it on the left.  If data > root, insert on right.  If there is no root, 
+	// insert the new node.  Otherwise, return the root.
+	BTNode* insert(BTNode *root, int data) {
+		if (root == nullptr)
+			return new BTNode(data);
+		BTNode *newNode = new BTNode(data);
+		if (data < *(root->dataPtr))
+			root->leftPtr = insert(root->leftPtr, data);
+		else if (data > *(root->dataPtr))
+			root->rightPtr = insert(root->rightPtr, data);
+		return root;
+	}
+
+	/* Deep copy function, new BTree contains copy of all nodes in original.
+	* if you want to create a replica of a tree, put the nodes in an array with a pre-order traversal. 
+	* Then perform an Insert operation on a new tree for each value in the array. You will end up with a copy of your original tree.
+	*/
+	BTree* copy(BTree rhs) {
+		BTree *newBTree = new BTree();
+		if (rhs.rootPtr == nullptr)
+			return newBTree;  // return empty BTree
+
+		return newBTree;
+	}
+
+	BTNode* copyHelper(BTNode *node) {
+		if (node == nullptr)
+			return nullptr;
+		BTNode next = *node;
+		next.leftPtr = copyHelper(node->leftPtr);
+		next.rightPtr = copyHelper(node->rightPtr);
+		return &next;
+	}
+
+
 	// Return vector of node data while traversing tree using pre-order algorithm.  Parameter should be root node.
-	vector<int> preOrderTraverse(BTNode *node) {
-		cout << "BTree preOrderTraverse called." << endl;
+	void preOrderTraverse(BTNode *node) {
+		if (node == nullptr)
+			return;
+		cout << "BTree preOrderTraverse called on node " << *(node->dataPtr) << "." << endl;
 		nodeData.push_back(*(node->dataPtr));
-		cout << node->dataPtr << " " << node->leftPtr << " " << node->rightPtr << endl;
-		if(node->leftPtr != nullptr)
-			preOrderTraverse(node->leftPtr);
-		if (node->rightPtr != nullptr)
-			preOrderTraverse(node->rightPtr);
-		return nodeData;
+		preOrderTraverse(node->leftPtr);
+		preOrderTraverse(node->rightPtr);
 	}
 
 	// Return vector of nodes while traversing tree using in-order algorithm.
-	vector<int> inOrderTraverse(BTNode* node) {
-		cout << "BTree inOrderTraverse called." << endl;
+	void inOrderTraverse(BTNode* node) {
+		if (node == nullptr)
+			return;
+		cout << "BTree inOrderTraverse called on node " << *(node->dataPtr) << "." << endl;
+		inOrderTraverse(node->leftPtr);
 		nodeData.push_back(*(node->dataPtr));
-		if (node->leftPtr != nullptr)
-			preOrderTraverse(node->leftPtr);
-		cout << node->dataPtr << " " << node->leftPtr << " " << node->rightPtr << endl;
-		if (node->rightPtr != nullptr)
-			preOrderTraverse(node->rightPtr);
-		return nodeData;
+		inOrderTraverse(node->rightPtr);
 	}
 
 	// Return vector of nodes while traversing tree using post-order algorithm.
-	vector<int> postOrderTraverse(BTNode* node) {
-		cout << "BTree postOrderTraverse called." << endl;
+	void postOrderTraverse(BTNode* node) {
+		if (node == nullptr)
+			return;
+		cout << "BTree postOrderTraverse called on node " << *(node->dataPtr) << "." << endl;
+		postOrderTraverse(node->leftPtr);
+		postOrderTraverse(node->rightPtr);
 		nodeData.push_back(*(node->dataPtr));
-		if (node->leftPtr != nullptr)
-			preOrderTraverse(node->leftPtr);
-		if (node->rightPtr != nullptr)
-			preOrderTraverse(node->rightPtr);
-		cout << node->dataPtr << " " << node->leftPtr << " " << node->rightPtr << endl;
-		return nodeData;
 	}
 
 	// Find pointer of BTNode containing particular data.
-
-	// Insert a BTNode after a particular BTNode with given memory location.
 
 	// Delete a BTNode at a particular memory location.
 	
 	// Print vector of BTNodes.
 	string toString() {
 		string output = "";
-		for (int data : nodeData)
+		for (int data : nodeData) {
 			output.append(to_string(data));
-			output.append(" ");
+			output.append(", ");
+		}
 		return output;
 	}
 

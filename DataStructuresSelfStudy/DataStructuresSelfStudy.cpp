@@ -20,6 +20,7 @@ int main()
 	_CrtMemCheckpoint(&s1);
 
 	BTree *tree = new BTree();
+	/*
 	tree->rootPtr = new BTNode(10);
 	tree->rootPtr->leftPtr = new BTNode(8);
 	tree->rootPtr->rightPtr = new BTNode(12);
@@ -27,8 +28,23 @@ int main()
 	tree->rootPtr->leftPtr->rightPtr = new BTNode(9);
 	tree->rootPtr->rightPtr->leftPtr = new BTNode(11);
 	tree->rootPtr->rightPtr->rightPtr = new BTNode(13);
-	tree->preOrderTraverse(tree->rootPtr);
-	cout << tree->toString() << endl;
+	*/
+	tree->insert(tree->rootPtr, 10);
+	tree->insert(tree->rootPtr, 8);
+	tree->insert(tree->rootPtr, 12);
+	tree->insert(tree->rootPtr, 7);
+	tree->insert(tree->rootPtr, 9);
+	tree->insert(tree->rootPtr, 11);
+	tree->insert(tree->rootPtr, 13);
+
+	tree->preOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
+	cout << tree->toString() << endl;  // prints nodeData vector
+	tree->nodeData.clear();
+	tree->inOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
+	cout << tree->toString() << endl;  // prints nodeData vector
+	tree->nodeData.clear();
+	tree->postOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
+	cout << tree->toString() << endl;  // prints nodeData vector
 	delete tree;
 
 	_CrtMemCheckpoint(&s2);
