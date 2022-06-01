@@ -2,25 +2,28 @@
 #include <string>
 using namespace std;
 
-class TNode {
+class BTNode {
 public:
 	// I assumed the node would contain a large object on the heap, requiring a custom destructor.
 	// Using an int datatype created on the heap is just for testing purposes.
 	int* dataPtr = new int;  // create a new ptr to data on the heap
-	TNode* rightPtr, *leftPtr;
+	BTNode* rightPtr, *leftPtr;
 
 	// default constructor
-	TNode() {
+	BTNode() {
+		cout << "BTNode default constructor called." << endl;
 		dataPtr = 0;
 		leftPtr = rightPtr = nullptr;
 	}
 	// parameterized constructor
-	TNode(int data) {
+	BTNode(int data) {
+		cout << "BTNode parameterized constructor called." << endl;
 		*(this->dataPtr) = data;  // make "data" the value of the int on the heap 
-		this->leftPtr = this->rightPtr;
+		this->leftPtr = this->rightPtr = nullptr;
 	}
 	// destructor, recursively deletes the entire subtree from this node down.
-	~TNode() {
+	~BTNode() {
+		cout << "BTNode destructor called." << endl;
 		delete dataPtr; // because data is on the heap, delete it
 		dataPtr = nullptr;  // eliminate stale pointers
 		delete leftPtr;  
@@ -30,14 +33,16 @@ public:
 	}
 
 	//copy constructor 
-	TNode(const TNode& rhs) {
+	BTNode(const BTNode& rhs) {
+		//cout << "BTNode copy constructor called on node " << *(rhs.dataPtr) << endl;
 		*dataPtr = *rhs.dataPtr;
 		*leftPtr = *rhs.leftPtr;
 		*rightPtr = *rhs.rightPtr;
 	}
 
 	// copy assignment operator NOT using copy-and-swap idiom
-	TNode& operator=(TNode& rhs) {
+	BTNode& operator=(BTNode& rhs) {
+		//cout << "BTNode copy assignment operator called on node " << *(rhs.dataPtr) << endl;
 		return *this;
 	}
 

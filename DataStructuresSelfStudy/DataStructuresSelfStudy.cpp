@@ -2,18 +2,13 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include "LinkedList.cpp"
+#include "BTree.cpp"
 // define and imports for memory leak detection
 #include <stdlib.h>
 #include <crtdbg.h>
 #define _CRTDBG_MAP_ALLOC  // detailed debug report
 
 using namespace std;
-
-SLNode bogus(SLNode n) {
-	cout << "bogus method called" << endl;
-	return n;
-}
 
 int main()
 {
@@ -24,29 +19,21 @@ int main()
 	_CrtMemState s1, s2, s3;
 	_CrtMemCheckpoint(&s1);
 
-	LinkedList* l1 = new LinkedList();
-	for (int i = 0; i < 10; i++) {
-		l1->insertLast(i);
-	}
-
-	vector<LinkedList> v;
-	for (int i = 0; i < 100; i++) {
-		v.push_back(*l1);
-		// memory state checkpoint 2, for debugging memory leaks
-	}
-	for (LinkedList l : v) {
-		l.print();
-	}
+	BTree *tree = new BTree();
+	tree->rootPtr = new BTNode(10);
+	tree->rootPtr->leftPtr = new BTNode(8);
+	tree->rootPtr->rightPtr = new BTNode(12);
+	tree->rootPtr->leftPtr->leftPtr = new BTNode(7);
+	tree->rootPtr->leftPtr->rightPtr = new BTNode(9);
+	tree->rootPtr->rightPtr->leftPtr = new BTNode(11);
+	tree->rootPtr->rightPtr->rightPtr = new BTNode(13);
+	tree->preOrderTraverse(tree->rootPtr);
+	cout << tree->toString() << endl;
+	delete tree;
 
 	_CrtMemCheckpoint(&s2);
 	if (_CrtMemDifference(&s3, &s1, &s2))
 		_CrtMemDumpStatistics(&s3);
-
-
-
-	delete l1;
-	//delete &v;  // all elements of container are deleted when container is deleted.
-	//delete &l2;
 
 	// execution time end, time taken
 	time(&end);
