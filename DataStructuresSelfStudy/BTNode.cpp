@@ -12,14 +12,15 @@ public:
 	// default constructor
 	BTNode() {
 		cout << "BTNode default constructor called." << endl;
-		dataPtr = 0;
+		dataPtr = nullptr;
+		leftPtr = rightPtr = nullptr;
 		leftPtr = rightPtr = nullptr;
 	}
 	// parameterized constructor
 	BTNode(int data) {
 		cout << "BTNode parameterized constructor called." << endl;
-		*(this->dataPtr) = data;  // make "data" the value of the int on the heap 
-		this->leftPtr = this->rightPtr = nullptr;
+		*(dataPtr) = data;  // make "data" the value of the int on the heap 
+		leftPtr = rightPtr = nullptr;
 	}
 	// destructor, recursively deletes the entire subtree from this node down.
 	~BTNode() {

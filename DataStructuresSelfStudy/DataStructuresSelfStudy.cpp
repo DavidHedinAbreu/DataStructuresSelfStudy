@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include <iomanip>
 #include <string>
 #include <vector>
@@ -13,38 +14,31 @@ using namespace std;
 int main()
 {
 	// execution time start
-	time_t start, end;
-	time(&start);
+	clock_t start, end;
+	double timeTaken;
+	start = clock();
+	// memory state checkpoint 1, for debugging memory leaks
 	// memory state checkpoint 1, for debugging memory leaks
 	_CrtMemState s1, s2, s3;
 	_CrtMemCheckpoint(&s1);
+	 
+	vector<int> data{ 10, 8, 12, 7, 13 };
+	BTree *tree = new BTree(data);
+	tree->diagram();
 
-	BTree *tree = new BTree();
-	/*
-	tree->rootPtr = new BTNode(10);
-	tree->rootPtr->leftPtr = new BTNode(8);
-	tree->rootPtr->rightPtr = new BTNode(12);
-	tree->rootPtr->leftPtr->leftPtr = new BTNode(7);
-	tree->rootPtr->leftPtr->rightPtr = new BTNode(9);
-	tree->rootPtr->rightPtr->leftPtr = new BTNode(11);
-	tree->rootPtr->rightPtr->rightPtr = new BTNode(13);
-	*/
-	tree->insert(tree->rootPtr, 10);
-	tree->insert(tree->rootPtr, 8);
-	tree->insert(tree->rootPtr, 12);
-	tree->insert(tree->rootPtr, 7);
-	tree->insert(tree->rootPtr, 9);
-	tree->insert(tree->rootPtr, 11);
-	tree->insert(tree->rootPtr, 13);
+	//cout << "Get the pointer to the node containing the key that is to be deleted." << endl;
+	//BTNode* nodeToDelete = tree->find(tree->rootPtr, 13);
+	int x = 8;
+	cout << "Delete node " << x << "." << endl;
+	BTNode* newRoot = tree->deleteNode(tree->rootPtr, x);
+	tree->diagram();
 
-	tree->preOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
-	cout << tree->toString() << endl;  // prints nodeData vector
-	tree->nodeData.clear();
-	tree->inOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
-	cout << tree->toString() << endl;  // prints nodeData vector
-	tree->nodeData.clear();
-	tree->postOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
-	cout << tree->toString() << endl;  // prints nodeData vector
+	//BTree* tree2 = tree->copy();
+
+	//tree->preOrderTraverse(tree->rootPtr);  // loads nodeData vector; assumes nodeData has been cleared.
+	//cout << tree->toString() << endl;  // prints nodeData vector
+	//tree->nodeData.clear();
+
 	delete tree;
 
 	_CrtMemCheckpoint(&s2);
@@ -52,9 +46,9 @@ int main()
 		_CrtMemDumpStatistics(&s3);
 
 	// execution time end, time taken
-	time(&end);
-	double timeTaken = double(end - start);
-	cout << "Time taken is " << timeTaken << " sec." << endl;
+	end = clock();
+	timeTaken = (double)(end - start)/CLOCKS_PER_SEC;
+	cout << "Time taken is " << fixed << setprecision(3) << timeTaken << " sec." << endl;
 	// memory leak report
 	_CrtDumpMemoryLeaks();
 }
